@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GIF 채팅방</title>
+</head>
+<body>
+<div>
+    <table id="adds">
+        
+    </table>
+    <from>
+        <input id="a" placeholder="서버로 문자 보내기">
+        <button type="submit" id="b"> 문자 보내기</button>
+    </from>
+</div>
+<script>
+  const webSocket = new WebSocket("ws://localhost:8005");
+  webSocket.onopen = function () {
+    console.log('서버와 웹소켓 연결 성공!');
+  };
+  webSocket.onmessage = function (event) {
+        const newTr = document.createElement("tr");
+        const newTd = document.createElement("td");
+        // <td> 태그에 내용을 추가할 수도 있습니다.
+        newTd.textContent = event.data;
+        newTr.appendChild(newTd)
+        // <tr> 태그를 찾아서 가져옵니다.
+        const tbElement = document.getElementById("adds");
+
+        // <tr> 태그에 새로 생성한 <td> 태그를 추가합니다.
+        tbElement.appendChild(newTr);
+  };
+  document.getElementById('b').addEventListener("click",(e)=>{
+        e.preventDefault()
+        const message = document.getElementById('a').value
+        webSocket.send(message);
+    })
+</script>
+</body>
+</html>
