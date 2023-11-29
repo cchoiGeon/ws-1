@@ -14,27 +14,35 @@
         <button type="submit" id="b"> 문자 보내기</button>
     </from>
 </div>
+<script src="/socket.io/socket.io.js"></script>
 <script>
-  const webSocket = new WebSocket("ws://localhost:8005");
-  webSocket.onopen = function () {
-    console.log('서버와 웹소켓 연결 성공!');
-  };
-  webSocket.onmessage = function (event) {
-        const newTr = document.createElement("tr");
-        const newTd = document.createElement("td");
+    const socket = io.connect('http://localhost:8005', {
+        path: '/socket.io',
+        transports: ['websocket'],
+    });
+    socket.on('news',function (data) {
+        console.log('서버로 부터 받은 데이터 : ',data);
+        var newTr = document.createElement("tr");
+
+        // <td> 태그를 생성합니다.
+        var newTd = document.createElement("td");
+
         // <td> 태그에 내용을 추가할 수도 있습니다.
-        newTd.textContent = event.data;
-        newTr.appendChild(newTd)
-        // <tr> 태그를 찾아서 가져옵니다.
-        const tbElement = document.getElementById("adds");
+        newTd.textContent = data
 
         // <tr> 태그에 새로 생성한 <td> 태그를 추가합니다.
-        tbElement.appendChild(newTr);
-  };
-  document.getElementById('b').addEventListener("click",(e)=>{
+        newTr.appendChild(newTd);
+
+        // <table> 태그를 찾아서 가져옵니다.
+        var tableElement = document.getElementById("adds");
+
+        // <table> 태그에 새로 생성한 <tr> 태그를 추가합니다.
+        tableElement.appendChild(newTr);
+    });
+    document.getElementById('b').addEventListener('click',(e)=>{
         e.preventDefault()
         const message = document.getElementById('a').value
-        webSocket.send(message);
+        socket.emit('reply',message);
     })
 </script>
 </body>
