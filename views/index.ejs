@@ -21,23 +21,20 @@
         transports: ['websocket'],
     });
     socket.on('news',function (data) {
-        console.log('서버로 부터 받은 데이터 : ',data);
-        var newTr = document.createElement("tr");
+        const tableElement = document.getElementById("adds");
+        tableElement.innerHTML = '';
 
-        // <td> 태그를 생성합니다.
-        var newTd = document.createElement("td");
+        data.forEach(element => {
+            const message = element.chatting;
+            const newTr = document.createElement("tr");
+            const newTd = document.createElement("td");
 
-        // <td> 태그에 내용을 추가할 수도 있습니다.
-        newTd.textContent = data
-
-        // <tr> 태그에 새로 생성한 <td> 태그를 추가합니다.
-        newTr.appendChild(newTd);
-
-        // <table> 태그를 찾아서 가져옵니다.
-        var tableElement = document.getElementById("adds");
-
-        // <table> 태그에 새로 생성한 <tr> 태그를 추가합니다.
-        tableElement.appendChild(newTr);
+                // 이스케이프 처리하여 XSS 방어
+            const textNode = document.createTextNode(message);
+            newTd.appendChild(textNode);
+            newTr.appendChild(newTd);
+            tableElement.appendChild(newTr);
+        });
     });
     document.getElementById('b').addEventListener('click',(e)=>{
         e.preventDefault()

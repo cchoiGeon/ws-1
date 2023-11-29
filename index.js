@@ -5,10 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const ejs = require('ejs');
 const dotenv = require('dotenv');
-
 dotenv.config();
-const webSocket = require('./socket');
-const indexRouter = require('./routes');
 const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
@@ -18,6 +15,16 @@ const sessionMiddleware = session({
     secure: false,
   },
 });
+const {sequelize} = require('./models/index.js')
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('데이터베이스 연결 성공');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+const webSocket = require('./socket');
+const indexRouter = require('./routes');
 const app = express();
 app.set('view engine', 'ejs');
 app.set('html',require('ejs').renderFile);
@@ -50,4 +57,4 @@ const server = app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중');
 });
 
-webSocket(server);
+webSocket(server,sessionMiddleware);
