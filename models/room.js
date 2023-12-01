@@ -1,13 +1,21 @@
 const Sequelize = require('sequelize')
 
-class User extends Sequelize.Model {
+class Room extends Sequelize.Model {
     static initiate(sequelize){
-        User.init({
-            email : {
+        Room.init({
+            title : {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
-            chatting : {
+            password : {
+                type: Sequelize.TEXT,
+                allowNull: true,
+            },
+            count : {
+                type: Sequelize.TEXT,
+                allowNull: false,
+            },
+            owner : {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
@@ -15,8 +23,8 @@ class User extends Sequelize.Model {
             sequelize,
             timestamps: false,
             underscored:false,
-            modelName: 'User',
-            tableName: 'users',
+            modelName: 'Room',
+            tableName: 'rooms',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',
@@ -24,4 +32,4 @@ class User extends Sequelize.Model {
     }
 };
 
-module.exports = User;
+module.exports = Room;
