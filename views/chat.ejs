@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <%if(chats){%>
+            <%= chats[0].title%> 방 
+            <button type="submit" id="remove"> 방 나가기</button>
+            <table id="kr">
+                <%for(const chat of chats) {%>
+                    <tr>
+                        <td><%=chat.chatting%></td>
+                    </tr>
+                <%}%>
+            </table>
+        <%}%>
+        <form id="chat-form" >
+            <input type="text" id="chat" placeholder="문자를 보내세용">
+            <button id="subbutton" type="submit">보내기</button>
+        </form>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io.connect('http://localhost:8005/chat', {
+        path: '/socket.io',
+        transports: ['websocket'],
+    });
+    socket.emit('join', new URL(location).pathname.split('/').at(-1));
+    socket.on('newChat', (data) => {
+        const table = document.getElementById('kr');
+        const tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.textContent = data.chatting;
+        tr.appendChild(td);
+        table.appendChild(tr);
+    });
+    document.querySelector('#chat-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (e.target.chat.value) {
+        axios.post(`/chat/${new URL(location).pathname.split('/').at(-1)}`, {
+          chatting: this.chat.value,
+        })
+          .then(() => {
+            e.target.chat.value = '';
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+    document.getElementById('remove').addEventListener('click',(e)=>{
+        e.preventDefault();
+        axios.get(`/chat/${new URL(location).pathname.split('/').at(-1)}/remove`)
+          .then(() => {
+            window.location.href='/'
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+    })
+</script>
+
+</html>

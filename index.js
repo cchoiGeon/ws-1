@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const ejs = require('ejs');
@@ -31,8 +30,7 @@ app.set('html',require('ejs').renderFile);
 app.set('views', __dirname + '/views');
 app.set('port', 8005);
 
-app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname +'/static'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
