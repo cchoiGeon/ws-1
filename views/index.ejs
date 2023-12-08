@@ -59,10 +59,10 @@
             <div class="matchingProfile">
                 <div class="matchingProfile-toptop">
                     <div class="matchingProfile-top">
-                        <img id="char" src="avatar-img/1.png">
+                        <img id="char" src="<%=user.char%>">
                         <div id="name-major">
-                            <p id="name">최건</p>
-                            <p id="major">전자공학과-전자공학부</p>
+                            <p id="name"><%=user.name%></p>
+                            <p id="major"><%=user.major%></p>
                         </div>
                     </div>
                     <div id="introSentence"></div>
@@ -73,19 +73,19 @@
                         <table>
                             <tr>
                                 <td>나이</td>
-                                <td id="age">22</td>
+                                <td id="age"><%=user.age%></td>
                             </tr>
                             <tr>
                                 <td>MBTI</td>
-                                <td id="mbti">ENFJ</td>
+                                <td id="mbti"><%=user.mbti%></td>
                             </tr>
                             <tr>
-                                <td id="idtype">인스타그램</td>
-                                <td id="mediaid">coe4626</td>
+                                <td id="idtype"><%=user.idtype%></td>
+                                <td id="mediaid"><%=user.mediaid%></td>
                             </tr>
                             <tr>
                                 <td>흡연여부</td>
-                                <td id="smoke">비흡연자</td>
+                                <td id="smoke"><%=user.smoke%></td>
                             </tr>
                             <tr>
                                 <td>연락하기</td>
